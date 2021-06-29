@@ -2,12 +2,14 @@ using ExemploApiCatalogoJogos.Controllers.V1;
 using ExemploApiCatalogoJogos.Middleware;
 using ExemploApiCatalogoJogos.Repositories;
 using ExemploApiCatalogoJogos.Services;
+using ExemploApiCatalogoJogos.Context;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.IO;
 using System.Reflection;
@@ -20,14 +22,15 @@ namespace ExemploApiCatalogoJogos
         {
             Configuration = configuration;
         }
-
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped<IJogoService, JogoService>();
-            services.AddScoped<IJogoRepository, JogoRepository>();
+            services.AddScoped<IJogoRepository, JogoSqlServerRepository>();
+
+            services.AddDbContext<ApplicationDbContext>();
 
             #region CicloDeVida
 
